@@ -1,11 +1,11 @@
+@import '../../theme/variables.scss';
 #container {
   text-align: center;
-
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  // top: 50%;
+  // transform: translateY(-50%);
 }
 
 #container strong {
@@ -24,4 +24,36 @@
 
 #container a {
   text-decoration: none;
+}
+
+.task{
+  border: 1px solid var(--ion-color-medium);;
+  transition: 0.3s;
+}
+.task:hover{
+  margin-left: 5px;
+  // box-shadow: 0px 5px 5px -5px var(--ion-color-success);
+  // border: 1px solid var(--ion-color-dark);
+  border-left: 1px solid var(--ion-color-success);
+}
+.action-buttons{
+  display: inline-grid;
+  *{
+    margin: 2px
+  }
+}
+ion-icon:hover {
+  cursor: pointer;
+}
+#trash{
+  color: var(--ion-color-medium)
+}
+#trash:hover{
+  color: var(--ion-color-danger)
+}
+#create{
+  color: var(--ion-color-medium)
+}
+#create:hover{
+  color: var(--ion-color-dark)
 }

@@ -1,20 +1,88 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
+<ion-header [translucent]="true" class="mb-4">
+  <ion-toolbar class="d-flex">
+    <ion-title class="col-8 d-flex" style="float: left">
+      ToDapp
+    </ion-title>
+    <ion-title class="col-4 d-flex" *ngIf="walletConnected" style="float: right">
+      {{activeWallet}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+
+    <div class="container" *ngIf="!walletConnected" #noWallet>
+      <h2>Conéctate a la red</h2>
+      <p>Para comenzar a interactuar con la blockchain, debe conectar alguna billetera compatible.</p>
+      <button class="btn btn-secondary mt-2" (click)="connecWallet()">Conectar</button>
+    </div>
+
+    <div class="container" *ngIf="walletConnected" #walletActive>
+      <div class="col-8 m-auto mb-4" #newTaskContainer>
+        <div class="row">
+          <h2>Nueva Tarea</h2>
+        </div>
+        <div class="row">
+          <form (ngSubmit)="submitForm($event)">
+            <ion-item>
+              <ion-label class="text-muted">Titulo</ion-label>
+              <ion-input type="text" [(ngModel)]="todo.title" name="title"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label class="text-muted">Descripción</ion-label>
+              <ion-textarea [(ngModel)]="todo.description" name="description"></ion-textarea>
+            </ion-item>
+            <button ion-button type="submit" class="btn btn-success mt-2" style="float: right;"
+              [disabled]="!todo.title || !todo.description">Crear
+              Tarea</button>
+          </form>
+        </div>
+        <ion-item-divider></ion-item-divider>
+      </div>
+
+      <div class="col-8 m-auto mb-5" #listTasksContainer>
+        <ng-container *ngIf="showTasks; else loadingTasks">
+          <div class="row">
+            <h2>Mis Tareas</h2>
+          </div>
+          <div class="row">
+            <div class="task rounded-2 my-2" *ngFor="let task of tasksList">
+              <div class="row">
+                <div class="col-8 col-md-10" #taskContent>
+                  <div class="ion-text-start">
+                    <div class="row pt-2">
+                      <div class="col-8 col-md-10">
+                        <h4 class="p-0 m-0 mt-2" *ngIf="!task.done">{{task.title}}</h4>
+                        <h4 class="p-0 m-0 mt-2" *ngIf="task.done"><strike>{{task.title}}</strike></h4>
+                        <span class="small text-muted font-weight-light">{{task.createdAt}}</span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 py-2">
+                        <p>{{task.description}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4 col-md-2 align-self-center" #buttonActions>
+                  <div class="p-0 ion-text-end">
+                    <div class="action-buttons">
+                      <ion-toggle color="success" style="width: 30px; height: 15px; padding: 5px 0px;" [(ngModel)]="task.done" (click)="toggleDone(task)"></ion-toggle>
+                      <ion-icon id="trash" class="w-100" style="font-size: 24px;" name="trash" (click)="deleteTask(task.id)"></ion-icon>
+                      <ion-icon id="create" class="w-100" style="font-size: 24px;" name="create"></ion-icon>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #loadingTasks>
+          <ion-spinner name="dots" color="success"></ion-spinner>
+        </ng-template>
+      </div>
+    </div>
   </div>
 </ion-content>
