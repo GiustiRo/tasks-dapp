@@ -74,6 +74,12 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+  
+  ion-popover.edit-task-popover {
+   --width: 70vw;
+   --backdrop-opacity: 0.5 !important;
+   top: -10%;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

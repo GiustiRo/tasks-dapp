@@ -31,6 +31,15 @@ contract("TasksContract", () => {
         const result = await this.tasksContract.tasks(counter);
         await this.tasksContract.deleteTask(result.id);
         const trytogetDeleted = await this.tasksContract.tasks(counter);
-        assert.equal(trytogetDeleted.id, 0)
+        assert.equal(trytogetDeleted.id, 0);
+    });
+
+    it('Update/Edit task', async () => {
+        await this.tasksContract.createTask("Tarea Mocha 2", "Esta tarea se generó automáticamente como prueba.");
+        const counter = +await this.tasksContract.taskCounter();
+        const result = await this.tasksContract.tasks(counter);
+        await this.tasksContract.updateTask(result.id, 'Nuevo Titulo', 'Descripción actualizada!');
+        const updatedTask = await this.tasksContract.tasks(counter);
+        assert.notEqual(updatedTask.title, 'Tarea Mocha 2');
     })
 })

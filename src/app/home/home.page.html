@@ -3,8 +3,8 @@
     <ion-title class="col-8 d-flex" style="float: left">
       ToDapp
     </ion-title>
-    <ion-title class="col-4 d-flex" *ngIf="walletConnected" style="float: right">
-      {{activeWallet}}
+    <ion-title class="col-4 d-flex ion-text-end" *ngIf="walletConnected" style="float: right">
+      {{activeWallet?.slice(0,4)}}...{{activeWallet?.slice(activeWallet?.length-4, activeWallet?.length)}}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,7 +14,7 @@
 
     <div class="container" *ngIf="!walletConnected" #noWallet>
       <h2>Conéctate a la red</h2>
-      <p>Para comenzar a interactuar con la blockchain, debe conectar alguna billetera compatible.</p>
+      <p>Para comenzar a interactuar con la dapp, debe conectar alguna billetera compatible.</p>
       <button class="btn btn-secondary mt-2" (click)="connecWallet()">Conectar</button>
     </div>
 
@@ -38,21 +38,21 @@
               Tarea</button>
           </form>
         </div>
-        <ion-item-divider></ion-item-divider>
+        <ion-item-divider class="col-6 m-auto"></ion-item-divider>
       </div>
 
       <div class="col-8 m-auto mb-5" #listTasksContainer>
-        <ng-container *ngIf="showTasks; else loadingTasks">
+        <ng-container *ngIf="showTasks && tasksList && tasksList.length; else loadingTasks">
           <div class="row">
             <h2>Mis Tareas</h2>
           </div>
           <div class="row">
             <div class="task rounded-2 my-2" *ngFor="let task of tasksList">
-              <div class="row">
+              <div class="row" [class.task-done]="task.done">
                 <div class="col-8 col-md-10" #taskContent>
                   <div class="ion-text-start">
                     <div class="row pt-2">
-                      <div class="col-8 col-md-10">
+                      <div class="col-12">
                         <h4 class="p-0 m-0 mt-2" *ngIf="!task.done">{{task.title}}</h4>
                         <h4 class="p-0 m-0 mt-2" *ngIf="task.done"><strike>{{task.title}}</strike></h4>
                         <span class="small text-muted font-weight-light">{{task.createdAt}}</span>
@@ -67,20 +67,25 @@
                 </div>
                 <div class="col-4 col-md-2 align-self-center" #buttonActions>
                   <div class="p-0 ion-text-end">
-                    <div class="action-buttons">
-                      <ion-toggle color="success" style="width: 30px; height: 15px; padding: 5px 0px;" [(ngModel)]="task.done" (click)="toggleDone(task)"></ion-toggle>
+                    <div class="action-buttons" style="min-width: 30px;">
+                      <!-- <ion-toggle color="success" style="width: 30px; height: 15px; padding: 5px 0px;" [(ngModel)]="task.done" (click)="toggleDone(task)"></ion-toggle> -->
+                      <ion-icon [id]="task.done? 'checkbox' : 'square'" class="w-100" style="font-size: 24px;" [name]="task.done? 'checkbox' : 'square'" (click)="toggleDone(task)"></ion-icon>
                       <ion-icon id="trash" class="w-100" style="font-size: 24px;" name="trash" (click)="deleteTask(task.id)"></ion-icon>
-                      <ion-icon id="create" class="w-100" style="font-size: 24px;" name="create"></ion-icon>
+                      <ion-icon id="create" class="w-100" style="font-size: 24px;" name="create" (click)="editTaskMode(task)"></ion-icon>
                     </div>
                   </div>
                 </div>
               </div>
-              
             </div>
           </div>
         </ng-container>
         <ng-template #loadingTasks>
-          <ion-spinner name="dots" color="success"></ion-spinner>
+          <ion-spinner *ngIf="!showTasks" name="dots" color="success"></ion-spinner>
+          <div *ngIf="showTasks && (!tasksList || !tasksList.length)">
+            
+            <p>No hay tareas para mostrar!</p>
+            <small class="text-muted">No tiene tareas creadas o no pudimos encontrar tus tareas.</small>
+          </div>
         </ng-template>
       </div>
     </div>

@@ -13,26 +13,36 @@ export class TasksService {
     private toast: ToastService
   ) { }
 
-  checkContract() {
-    return this.web3client.contracts.tasksContract && this.web3client.contracts.tasksContract != null;
+  checkContract(contract:string) {
+    return this.web3client.contracts[contract] && this.web3client.contracts[contract] != null;
   }
 
   async createTask(title: string, description: string, fromWallet?: string) { // CRUD methods better to be at centralized service component.
     try {
-      if (this.checkContract()) {
+      if (this.checkContract('tasksContract')) {
         return await this.web3client.contracts.tasksContract.methods.createTask(title, description).send({ from: fromWallet });
       }
     } catch (error) {
       this.showToast('danger', error.message);
       throw new Error(error.message);
-
     }
   }
 
   async deleteTask(id: number, fromWallet?: string){
     try {
-      if (this.checkContract()) {
+      if (this.checkContract('tasksContract')) {
         await this.web3client.contracts.tasksContract.methods.deleteTask(id).send({from: fromWallet});
+      }
+    } catch (error) {
+      this.showToast('danger', error.message);
+      throw new Error(error.message);
+    }
+  }
+
+  async updateTask(id: number, title:string, description:string, fromWallet?: string){
+    try {
+      if (this.checkContract('tasksContract')) {
+        await this.web3client.contracts.tasksContract.methods.updateTask(id, title, description).send({from: fromWallet});
       }
     } catch (error) {
       this.showToast('danger', error.message);
@@ -42,7 +52,7 @@ export class TasksService {
 
   async toggleDone(id: number, fromWallet?: string) {
     try {
-      if (this.checkContract()) {
+      if (this.checkContract('tasksContract')) {
         await this.web3client.contracts.tasksContract.methods.toggleDone(id).send({ from: fromWallet });
       }
     } catch (error) {

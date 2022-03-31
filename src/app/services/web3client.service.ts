@@ -40,7 +40,7 @@ export class Web3clientService {
 
   async loadContracts() {
     if (this.web3 != null) {
-      this.contracts.tasksContract = await new this.web3.eth.Contract(TasksContract.abi, TasksContract.networks[this.networkId].address);
+      this.contracts.tasksContract = await new this.web3.eth.Contract(TasksContract.abi, TasksContract.networks[this.networkId]?.address);
       this.contracts.tasksContract?.setProvider(this.eth);
       console.log(this.contracts);
     }

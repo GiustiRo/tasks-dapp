@@ -1,0 +1,20 @@
+<div class="col-10 m-auto my-5" #editTaskContainer>
+  <div class="row ion-text-center">
+    <h2>Actualizar Tarea</h2>
+  </div>
+  <div class="row" *ngIf="task && task.id">
+    <form (ngSubmit)="submitForm($event)">
+      <ion-item>
+        <ion-label class="text-muted">Titulo</ion-label>
+        <!-- <ion-input type="text" [ngModel]="task?.title" (ngModelChange)="task.title=$event" name="title"></ion-input> -->
+        <ion-input type="text" [(ngModel)]="task.title" name="title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label class="text-muted">Descripción</ion-label>
+        <ion-textarea [(ngModel)]="task.description" name="description"></ion-textarea>
+      </ion-item>
+      <button ion-button type="submit" class="btn btn-success mt-2" style="float: right;"
+        [disabled]="!task.title || !task.description">Actualizar</button>
+    </form>
+  </div>
+</div>

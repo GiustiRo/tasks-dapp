@@ -27,6 +27,13 @@ contract TasksContract {
         tasks[taskCounter] = Task(taskCounter, _title, _description, false, block.timestamp);
     }
 
+    function updateTask(uint _id, string memory _title, string memory _description) public {
+        if(tasks[_id].id > 0){
+            tasks[_id].title = _title;
+            tasks[_id].description = _description;
+        }
+    }
+
     function deleteTask(uint _id) public {
         if(tasks[_id].id > 0){
             delete tasks[_id];
